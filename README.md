@@ -51,14 +51,7 @@ else:
 
 
 
-```bash
-python -m unittest discover
-```
-
 ## License
 
 This project is licensed under the MIT License.
 
-## Contributing
-
-If you would like to contribute to **MicroJWT**, feel free to submit a pull request or open an issue. Contributions are always welcome! You can contact the project owner via email for any inquiries.
