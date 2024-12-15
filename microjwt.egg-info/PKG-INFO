@@ -1,0 +1,12 @@
+Metadata-Version: 2.1
+Name: microjwt
+Version: 0.0.0
+Summary: A simple HMAC-based JWT implementation for MicroPython
+Home-page: https://github.com/armanghobadi/microjwt
+Author: Arman Ghobadi
+Author-email: arman.ghobadi.ag@gmai.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+License-File: LICENSE

@@ -6,10 +6,11 @@ setup(
     author="Arman Ghobadi",  
     author_email="arman.ghobadi.ag@gmai.com",  
     url="https://github.com/armanghobadi/microjwt",  
-    packages=find_packages(),  
-    install_requires=[  
-        "ubinascii",  
-    ],
+    packages=find_packages(), 
+    install_requires=[
+        
+    ], 
+    
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

@@ -1,0 +1,12 @@
+LICENSE
+MANIFEST.in
+README.md
+pyproject.toml
+setup.py
+microjwt/__init__.py
+microjwt/core.py
+microjwt.egg-info/PKG-INFO
+microjwt.egg-info/SOURCES.txt
+microjwt.egg-info/dependency_links.txt
+microjwt.egg-info/top_level.txt
+tests/test_microjwt.py
