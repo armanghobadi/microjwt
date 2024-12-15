@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="microjwt",  # نام پکیج
+    name="microjwt",  
     description="A simple HMAC-based JWT implementation for MicroPython",
     author="Arman Ghobadi",  
     author_email="arman.ghobadi.ag@gmai.com",  
@@ -15,5 +15,5 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.6',  # نسخه‌های پشتیبانی شده
+    python_requires='>=3.6',  
 )
