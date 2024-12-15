@@ -55,3 +55,8 @@ else:
 
 This project is licensed under the MIT License.
 
+## Test Images
+
+![Token in Session](./tests/cookie.png)
+
+![Token in Test-file](./tests/test.png)
