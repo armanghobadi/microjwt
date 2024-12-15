@@ -20,11 +20,11 @@ JWT is commonly used in web applications for stateless authentication. **MicroJW
 
 To install **MicroJWT**, you can use `pip`:
 
-```bash
-pip install microjwt
-```
+ for MicroPython, use the appropriate package manager like `upip` to install directly on your microcontroller.
 
-Or, for MicroPython, use the appropriate package manager like `upip` to install directly on your microcontroller.
+```bash
+upip install microjwt
+```
 
 ## Usage
 
@@ -32,13 +32,13 @@ Here is an example of how to create and verify a JWT token:
 
 ```python
 from microjwt.core import microjwt
-import time
+
 
 # Define the secret key
 secret_key = "my_secret_key"
 
 # Create a JWT token
-token = microjwt.create_token("john_doe", "admin", secret_key)
+token = microjwt.create_token("Arman", "admin", secret_key)
 
 # Verify the token
 is_valid = microjwt.verify_token(token, secret_key)
