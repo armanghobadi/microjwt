@@ -169,6 +169,6 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Contact
 
 For questions or support, contact the maintainers:
-- Email: your-email@example.com
+- Email: arman.ghobadi.ag@gmail.com
 
 Thank you for using MicroJWT! We hope it empowers your secure, embedded applications.
