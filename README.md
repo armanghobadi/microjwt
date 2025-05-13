@@ -1,62 +1,174 @@
+# MicroJWT: Secure JWT Library for MicroPython
 
-# MicroJWT
+![MicroJWT Logo](./imgs/logo.png) 
 
-**MicroJWT** is a simple implementation of JSON Web Tokens (JWT) specifically designed for use in **MicroPython**. This project utilizes **HMAC-SHA256** for signing tokens and employs basic user information (such as username and role) within the token itself. It allows you to create secure authentication systems on embedded systems, especially microcontrollers running MicroPython, like **ESP8266**, **ESP32**, and other similar devices.
 
-## Goal of the Project
+**MicroJWT** is a production-ready, lightweight JSON Web Token (JWT) library tailored for MicroPython environments. Designed for resource-constrained embedded systems, it offers secure token creation, verification, encryption, and refresh capabilities with minimal dependencies. With advanced security features like AES-256-CBC encryption, PBKDF2 key derivation, and constant-time signature verification, MicroJWT is perfect for IoT applications, secure API authentication, and session management.
 
-The goal of **MicroJWT** is to provide a lightweight, easy-to-use JWT solution for embedded systems and microcontrollers. With MicroPython being a minimalistic environment, this package aims to deliver a robust authentication mechanism without requiring heavy resources, making it ideal for IoT devices and embedded applications.
-
-JWT is commonly used in web applications for stateless authentication. **MicroJWT** brings this functionality to the world of embedded systems, allowing your devices to securely authenticate with external systems or APIs.
+---
 
 ## Features
 
-- **HMAC-SHA256 Signing**: Provides a secure way of signing and verifying tokens using HMAC and SHA-256.
-- **Lightweight**: Designed with minimal overhead, making it suitable for resource-constrained devices.
-- **Compatibility**: Works seamlessly with MicroPython, making it compatible with popular microcontrollers like ESP8266, ESP32, and others.
-- **Security**: Supports secure token creation and verification, including expiration time (exp) to prevent token replay attacks.
+- **Secure JWT Handling**: Implements HMAC-SHA256 (HS256) for signing and verification, compliant with RFC 7519.
+- **Optional Token Encryption**: Encrypts tokens with AES-256-CBC for secure session storage.
+- **PBKDF2 Key Derivation**: Strengthens secret keys for enhanced security.
+- **Token Refresh**: Extends token validity without re-authentication.
+- **Audience Validation**: Restricts token usage to specific recipients via the `aud` claim.
+- **Revocation Support**: Manages an in-memory token revocation list for invalidating tokens.
+- **Constant-Time Verification**: Prevents timing attacks during signature validation.
+- **MicroPython Optimized**: Uses only standard modules (`hashlib`, `ucryptolib`, `ubinascii`, `json`, `time`, `os`, `binascii`).
+- **Configurable Logging**: Includes a lightweight `SimpleLogger` with INFO, WARNING, and ERROR levels, plus silent mode.
+- **Robust Input Validation**: Ensures reliability with comprehensive checks on user inputs.
+
+---
 
 ## Installation
 
-To install **MicroJWT**, you can use `pip`:
+1. **Clone or Download**:
+   ```bash
+   git clone https://github.com/armanghobadi/microjwt.git
+   ```
+   Alternatively, download the `jwt.py` file directly.
 
- for MicroPython, use the appropriate package manager like `upip` to install directly on your microcontroller.
+2. **Copy to MicroPython Device**:
+   Use a tool like `ampy`, `rshell`, or WebREPL to transfer `jwt.py` to your MicroPython device:
+   ```bash
+   ampy --port /dev/ttyUSB0 put microjwt.py
+   ```
 
-```bash
-upip install microjwt
-```
+3. **Verify Dependencies**:
+   Ensure your MicroPython build includes:
+   - `hashlib` with `sha256` support
+   - `ucryptolib` with AES (CBC mode)
+   - Standard modules: `ubinascii`, `json`, `time`, `os`, `binascii`
+
+   **Note**: If `ucryptolib` is unavailable, disable encryption by setting `encrypt=False`.
+
+---
 
 ## Usage
 
-Here is an example of how to create and verify a JWT token:
+### Basic Example
+Create and verify a standard JWT token:
 
 ```python
-from microjwt.core import microjwt
+from microjwt.jwt import MicroJWT
 
+# Initialize the JWT handler
+jwt = MicroJWT(secret_key="your-very-secure-secret-key-32bytes+", algorithm="HS256")
 
-# Define the secret key
-secret_key = "my_secret_key"
-
-# Create a JWT token
-token = microjwt.create_token("Arman", "admin", secret_key)
+# Create a token
+token = jwt.create_token(
+    username="user123",
+    role="admin",
+    additional_claims={"scope": "read:write"},
+    audience="api.example.com"
+)
+print("Token:", token)
 
 # Verify the token
-is_valid = microjwt.verify_token(token, secret_key)
-
-if is_valid:
-    print("The token is valid.")
+payload = jwt.verify_token(token, audience="api.example.com")
+if payload:
+    print("Token is valid:", payload)
 else:
-    print("The token is invalid.")
+    print("Token is invalid")
 ```
 
+### Encrypted Token for Session Storage
+Create and verify an encrypted token:
+
+```python
+# Create an encrypted token
+encrypted_token = jwt.create_token(
+    username="user123",
+    role="admin",
+    additional_claims={"scope": "read:write"},
+    audience="api.example.com",
+    encrypt=True
+)
+print("Encrypted Token:", encrypted_token)
+
+# Verify the encrypted token
+payload = jwt.verify_token(encrypted_token, audience="api.example.com", encrypted=True)
+if payload:
+    print("Encrypted token is valid:", payload)
+else:
+    print("Encrypted token is invalid")
+```
+
+### Token Refresh
+Refresh an existing token to extend its validity:
+
+```python
+new_token = jwt.refresh_token(encrypted_token, encrypted=True)
+print("Refreshed Token:", new_token)
+```
+
+### Revoke a Token
+Invalidate a token before its expiration:
+
+```python
+jwt.revoke_token(payload["jti"])
+payload = jwt.verify_token(new_token, encrypted=True)  # Returns None (revoked)
+print("Revoked token is invalid")
+```
+
+---
+
+## Configuration Options
+
+| Parameter       | Description                                      | Default       |
+|-----------------|--------------------------------------------------|---------------|
+| `secret_key`    | Secret key for signing (min 32 bytes)            | Required      |
+| `algorithm`     | HMAC algorithm (only HS256 supported)            | HS256         |
+| `ttl`           | Token time-to-live in seconds                    | 3600 (1 hour) |
+| `log_level`     | Logging level (INFO, WARNING, ERROR)             | INFO          |
+| `silent`        | Suppress logging if True                         | False         |
+| `encrypt`       | Encrypt token with AES-256-CBC                   | False         |
+| `audience`      | Restrict token to a specific audience             | None          |
+
+---
+
+## Test Screenshot
+
+Below is a screenshot of MicroJWT running on a MicroPython device:
+
+![tests imgs](./imgs/tests.png) 
+
+
+**Note**: To update the screenshot, run tests on your device and replace the image with your test output.
+
+---
+
+## Security Considerations
+
+- **Secret Key**: Store the secret key securely (e.g., in a hardware security module or configuration file).
+- **Encryption**: Use `encrypt=True` for tokens stored in sessions to prevent exposure of sensitive data.
+- **Revocation**: The in-memory revocation list is non-persistent. For production, integrate with persistent storage (e.g., a file or database).
+- **PBKDF2 Iterations**: The default 1000 iterations balances security and performance. Adjust (e.g., 500 for speed, 2000 for higher security) based on your device’s capabilities.
+- **Timing Attacks**: Constant-time comparison ensures resistance to timing attacks during verification.
+
+---
+
+## Deployment Notes
+
+- **MicroPython Build**: Confirm support for `hashlib.sha256` and `ucryptolib.aes`. If `ucryptolib` is unavailable, disable encryption (`encrypt=False`).
+- **Performance**: Test on your target hardware to ensure memory and CPU constraints are met. AES encryption and PBKDF2 are resource-intensive.
+- **Persistent Revocation**: Implement a persistent storage solution for `revoked_tokens` in long-running applications.
+- **Logging**: Set `log_level="ERROR"` or `silent=True` in production to minimize console output.
+
+---
 
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## Test Images
+---
 
-![Token in Session](./tests/cookie.png)
+## Contact
 
-![Token in Test-file](./tests/test.png)
+For questions or support, contact the maintainers:
+- Email: your-email@example.com
+
+Thank you for using MicroJWT! We hope it empowers your secure, embedded applications.
