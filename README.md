@@ -1,6 +1,6 @@
 # MicroJWT: Secure JWT Library for MicroPython
 
-![MicroJWT Logo](./imgs/logo.png) 
+![MicroJWT Logo](./Docs/imgs/logo.png) 
 
 
 **MicroJWT** is a production-ready, lightweight JSON Web Token (JWT) library tailored for MicroPython environments. Designed for resource-constrained embedded systems, it offers secure token creation, verification, encryption, and refresh capabilities with minimal dependencies. With advanced security features like AES-256-CBC encryption, PBKDF2 key derivation, and constant-time signature verification, MicroJWT is perfect for IoT applications, secure API authentication, and session management.
@@ -133,7 +133,7 @@ print("Revoked token is invalid")
 
 Below is a screenshot of MicroJWT running on a MicroPython device:
 
-![tests imgs](./imgs/tests.png) 
+![tests imgs](./Docs/imgs/tests.png) 
 
 
 **Note**: To update the screenshot, run tests on your device and replace the image with your test output.
@@ -158,7 +158,8 @@ Below is a screenshot of MicroJWT running on a MicroPython device:
 - **Logging**: Set `log_level="ERROR"` or `silent=True` in production to minimize console output.
 
 ---
-
+## Introduction File
+![tests imgs](./Docs/Arch&Intro.pdf) 
 
 ## License
 
